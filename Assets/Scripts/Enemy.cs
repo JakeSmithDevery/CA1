@@ -8,6 +8,9 @@ public class Enemy : MonoBehaviour
     public int Damage = 5;
     float horizontal;
     float vertical;
+    float DashTime = 1.5f;
+    float DashCooldown = 5;
+    public bool DashOn;
 
     GameManager gameManager;
     Rigidbody2D body;
@@ -31,6 +34,13 @@ public class Enemy : MonoBehaviour
 
         body.velocity = direction * MovementSpeed;
 
+        if(DashOn)
+        {
+            InvokeRepeating("MovespeedSlow", 1, 10);
+            InvokeRepeating("Dash", DashTime, 10);
+            InvokeRepeating("normaliseSpeed", 3, 10);
+        }
+
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
@@ -40,5 +50,22 @@ public class Enemy : MonoBehaviour
         Destroy(gameObject);
         
     }
+
+    private void MovespeedSlow()
+    {
+        MovementSpeed = 0;
+    }
+
+    private void Dash()
+    {
+        MovementSpeed = 15;
+    }
+
+    private void normaliseSpeed()
+    {
+        MovementSpeed = 10;
+    }
+
+
 
 }
